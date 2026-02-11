@@ -1,0 +1,311 @@
+/* Progress Bar Base */
+.progress {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-slow) ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Progress Bar Variants */
+.progress-bar.success {
+    background-color: var(--color-success);
+}
+
+.progress-bar.warning {
+    background-color: var(--color-warning);
+}
+
+.progress-bar.error {
+    background-color: var(--color-error);
+}
+
+/* Progress Bar Sizes */
+.progress-sm {
+    height: 4px;
+}
+
+.progress-md {
+    height: 8px;
+}
+
+.progress-lg {
+    height: 12px;
+}
+
+.progress-xl {
+    height: 16px;
+}
+
+/* Progress with Label */
+.progress-with-label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.progress-label-text {
+    font-weight: var(--font-medium);
+}
+
+.progress-label-percentage {
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+}
+
+/* Animated Progress */
+.progress-bar.animated {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.15) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 1rem 1rem;
+    animation: progress-stripes 1s linear infinite;
+}
+
+@keyframes progress-stripes {
+    0% { background-position: 1rem 0; }
+    100% { background-position: 0 0; }
+}
+
+/* Circular Progress */
+.progress-circular {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.progress-circular-svg {
+    transform: rotate(-90deg);
+}
+
+.progress-circular-background {
+    fill: none;
+    stroke: var(--color-bg-tertiary);
+    stroke-width: 8;
+}
+
+.progress-circular-bar {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset var(--transition-slow);
+}
+
+.progress-circular-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text-primary);
+}
+
+/* Course Progress Card */
+.course-progress-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+}
+
+.course-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.course-progress-title {
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+}
+
+.course-progress-stats {
+    display: flex;
+    gap: var(--spacing-lg);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.course-progress-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.course-progress-stat-label {
+    color: var(--color-text-tertiary);
+}
+
+.course-progress-stat-value {
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+}
+
+/* Video Progress Bar (player overlay) */
+.video-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: height var(--transition-fast);
+}
+
+.video-progress:hover {
+    height: 8px;
+}
+
+.video-progress-played {
+    height: 100%;
+    background-color: var(--color-primary);
+    position: relative;
+}
+
+.video-progress-buffered {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.video-progress-handle {
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.video-progress:hover .video-progress-handle {
+    opacity: 1;
+}
+
+/* Step Progress (for multi-step forms) */
+.step-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xl);
+}
+
+.step-progress-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: 1;
+    position: relative;
+}
+
+.step-progress-item::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-border);
+    z-index: -1;
+}
+
+.step-progress-item:last-child::after {
+    display: none;
+}
+
+.step-progress-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-semibold);
+    color: var(--color-text-tertiary);
+    transition: all var(--transition-fast);
+}
+
+.step-progress-item.active .step-progress-circle {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.step-progress-item.completed .step-progress-circle {
+    background-color: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.step-progress-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    text-align: center;
+}
+
+.step-progress-item.active .step-progress-label,
+.step-progress-item.completed .step-progress-label {
+    color: var(--color-text-primary);
+    font-weight: var(--font-medium);
+}
+
+/* Loading Progress Bar (indeterminate) */
+.progress-loading {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-bg-tertiary);
+}
+
+.progress-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    height: 100%;
+    width: 50%;
+    background-color: var(--color-primary);
+    animation: loading-progress 1.5s infinite;
+}
+
+@keyframes loading-progress {
+    0% { left: -50%; }
+    100% { left: 100%; }
+}

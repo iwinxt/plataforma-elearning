@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plataforma de cursos online - Aprenda no seu ritmo">
+    <meta name="theme-color" content="#6366f1">
+    
+    <!-- Preconnect para performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    
+    <!-- CSS Core -->
+    <link rel="stylesheet" href="/assets/css/core/reset.css">
+    <link rel="stylesheet" href="/assets/css/core/variables.css">
+    <link rel="stylesheet" href="/assets/css/core/typography.css">
+    <link rel="stylesheet" href="/assets/css/core/utilities.css">
+    
+    <!-- CSS Components -->
+    <link rel="stylesheet" href="/assets/css/components/buttons.css">
+    <link rel="stylesheet" href="/assets/css/components/cards.css">
+    <link rel="stylesheet" href="/assets/css/components/forms.css">
+    <link rel="stylesheet" href="/assets/css/components/modals.css">
+    <link rel="stylesheet" href="/assets/css/components/navigation.css">
+    <link rel="stylesheet" href="/assets/css/components/progress-bars.css">
+    <link rel="stylesheet" href="/assets/css/components/video-player.css">
+    <link rel="stylesheet" href="/assets/css/components/notifications.css">
+    
+    <!-- CSS Layouts -->
+    <link rel="stylesheet" href="/assets/css/layouts/auth.css">
+    <link rel="stylesheet" href="/assets/css/layouts/dashboard.css">
+    <link rel="stylesheet" href="/assets/css/layouts/course-player.css">
+    
+    <title>E-Learning Platform</title>
+</head>
+<body>
+    <!-- Loading inicial -->
+    <div id="app-loader" class="loader-container">
+        <div class="loader-spinner"></div>
+        <p>Carregando...</p>
+    </div>
+    
+    <!-- Container principal da SPA -->
+    <div id="app"></div>
+    
+    <!-- Toast notifications -->
+    <div id="notifications-container"></div>
+    
+    <!-- Modal container -->
+    <div id="modal-root"></div>
+    
+    <!-- JavaScript Core -->
+    <script src="/assets/js/config/constants.js"></script>
+    <script src="/assets/js/config/api-endpoints.js"></script>
+    <script src="/assets/js/config/routes.js"></script>
+    
+    <!-- JavaScript Utils -->
+    <script src="/assets/js/utils/storage.js"></script>
+    <script src="/assets/js/utils/crypto.js"></script>
+    <script src="/assets/js/utils/validators.js"></script>
+    <script src="/assets/js/utils/formatters.js"></script>
+    <script src="/assets/js/utils/seo.js"></script>
+    
+    <!-- JavaScript Core -->
+    <script src="/assets/js/core/events.js"></script>
+    <script src="/assets/js/core/api.js"></script>
+    <script src="/assets/js/core/state.js"></script>
+    <script src="/assets/js/core/router.js"></script>
+    
+    <!-- JavaScript Services -->
+    <script src="/assets/js/services/auth.service.js"></script>
+    <script src="/assets/js/services/course.service.js"></script>
+    <script src="/assets/js/services/progress.service.js"></script>
+    <script src="/assets/js/services/video.service.js"></script>
+    <script src="/assets/js/services/analytics.service.js"></script>
+    
+    <!-- JavaScript Components -->
+    <script src="/assets/js/components/Notification.js"></script>
+    <script src="/assets/js/components/Modal.js"></script>
+    <script src="/assets/js/components/LazyLoader.js"></script>
+    <script src="/assets/js/components/ProgressBar.js"></script>
+    <script src="/assets/js/components/CourseCard.js"></script>
+    <script src="/assets/js/components/VideoPlayer.js"></script>
+    <script src="/assets/js/components/QuizEngine.js"></script>
+    
+    <!-- JavaScript Middleware -->
+    <script src="/assets/js/middleware/rate-limit.middleware.js"></script>
+    <script src="/assets/js/middleware/session.middleware.js"></script>
+    <script src="/assets/js/middleware/auth.middleware.js"></script>
+    
+    <!-- JavaScript Pages -->
+    <script src="/assets/js/pages/auth/Login.js"></script>
+    <script src="/assets/js/pages/auth/Register.js"></script>
+    <script src="/assets/js/pages/auth/ForgotPassword.js"></script>
+    <script src="/assets/js/pages/dashboard/Home.js"></script>
+    <script src="/assets/js/pages/dashboard/MyCourses.js"></script>
+    <script src="/assets/js/pages/dashboard/Profile.js"></script>
+    <script src="/assets/js/pages/course/Catalog.js"></script>
+    <script src="/assets/js/pages/course/Details.js"></script>
+    <script src="/assets/js/pages/course/Player.js"></script>
+    
+    <!-- JavaScript App Initialization -->
+    <script src="/assets/js/core/app.js"></script>
+</body>
+</html>

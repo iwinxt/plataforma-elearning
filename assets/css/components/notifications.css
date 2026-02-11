@@ -1,0 +1,184 @@
+/* Notifications Container */
+#notifications-container {
+    position: fixed;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    z-index: var(--z-notification);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    max-width: 400px;
+    pointer-events: none;
+}
+
+/* Notification Base */
+.notification {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--color-border);
+    pointer-events: auto;
+    animation: slideInRight var(--transition-base) ease-out;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification.removing {
+    animation: slideOutRight var(--transition-base) ease-in forwards;
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Notification Icon */
+.notification-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Notification Content */
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.notification-message {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+}
+
+/* Notification Close Button */
+.notification-close {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.notification-close:hover {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
+
+/* Notification Types */
+.notification.success {
+    border-left: 4px solid var(--color-success);
+}
+
+.notification.success .notification-icon {
+    color: var(--color-success);
+}
+
+.notification.error {
+    border-left: 4px solid var(--color-error);
+}
+
+.notification.error .notification-icon {
+    color: var(--color-error);
+}
+
+.notification.warning {
+    border-left: 4px solid var(--color-warning);
+}
+
+.notification.warning .notification-icon {
+    color: var(--color-warning);
+}
+
+.notification.info {
+    border-left: 4px solid var(--color-info);
+}
+
+.notification.info .notification-icon {
+    color: var(--color-info);
+}
+
+/* Progress Bar (for auto-dismiss) */
+.notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: var(--color-primary);
+    animation: notification-progress-animation linear forwards;
+}
+
+@keyframes notification-progress-animation {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+/* Action Button */
+.notification-action {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.notification-action:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #notifications-container {
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+        left: var(--spacing-md);
+        max-width: none;
+    }
+    
+    .notification {
+        min-width: auto;
+        max-width: none;
+    }
+}
