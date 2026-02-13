@@ -1,150 +1,316 @@
-/* Light Theme - Explicit overrides and enhancements */
-/* Base light theme variables are the defaults in variables.css */
+/* ============================================
+   TEMA CLARO - Tema padrão da aplicação
+   ============================================ */
 
-/* Auth layout enhancements */
-[data-theme="light"] .auth-layout {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+[data-theme="light"],
+:root {
+    /* Cores principais */
+    --color-primary: #6366f1;
+    --color-primary-dark: #4f46e5;
+    --color-primary-light: #818cf8;
+    --color-primary-rgb: 99, 102, 241;
+
+    /* Secundária */
+    --color-secondary: #10b981;
+    --color-secondary-dark: #059669;
+    --color-secondary-light: #34d399;
+
+    /* Status */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #3b82f6;
+
+    /* Backgrounds */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f9fafb;
+    --color-bg-tertiary: #f3f4f6;
+    --color-bg-overlay: rgba(0, 0, 0, 0.5);
+    --color-bg-card: #ffffff;
+    --color-bg-input: #ffffff;
+    --color-bg-hover: #f9fafb;
+    --color-bg-active: #f3f4f6;
+    --color-bg-nav: #ffffff;
+    --color-bg-sidebar: #ffffff;
+    --color-bg-dropdown: #ffffff;
+    --color-bg-modal: #ffffff;
+    --color-bg-code: #f8fafc;
+    --color-bg-badge: #f3f4f6;
+    --color-bg-tooltip: #1f2937;
+
+    /* Textos */
+    --color-text-primary: #111827;
+    --color-text-secondary: #6b7280;
+    --color-text-tertiary: #9ca3af;
+    --color-text-inverse: #ffffff;
+    --color-text-link: #6366f1;
+    --color-text-link-hover: #4f46e5;
+    --color-text-disabled: #d1d5db;
+    --color-text-placeholder: #9ca3af;
+    --color-text-badge: #374151;
+    --color-text-code: #e11d48;
+    --color-text-tooltip: #ffffff;
+
+    /* Bordas */
+    --color-border: #e5e7eb;
+    --color-border-light: #f3f4f6;
+    --color-border-dark: #d1d5db;
+    --color-border-focus: #6366f1;
+    --color-border-error: #ef4444;
+    --color-border-success: #10b981;
+    --color-border-input: #d1d5db;
+
+    /* Sombras */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    --shadow-none: none;
+    --shadow-primary: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08),
+                   0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1),
+                         0 2px 6px rgba(0, 0, 0, 0.06);
+    --shadow-navbar: 0 1px 0 rgba(0, 0, 0, 0.08);
+    --shadow-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg,
+        var(--color-primary) 0%,
+        var(--color-primary-dark) 100%);
+    --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-card: linear-gradient(to bottom, transparent 0%,
+        rgba(0,0,0,0.7) 100%);
+
+    /* Componentes específicos */
+    --navbar-bg: rgba(255, 255, 255, 0.95);
+    --navbar-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+    --navbar-border: var(--color-border);
+    --navbar-backdrop: blur(12px);
+
+    --sidebar-bg: #ffffff;
+    --sidebar-border: var(--color-border);
+    --sidebar-item-hover: var(--color-bg-secondary);
+    --sidebar-item-active-bg: rgba(99, 102, 241, 0.08);
+    --sidebar-item-active-color: var(--color-primary);
+
+    --card-bg: #ffffff;
+    --card-border: var(--color-border);
+    --card-shadow: var(--shadow-card);
+    --card-shadow-hover: var(--shadow-card-hover);
+
+    --input-bg: #ffffff;
+    --input-border: var(--color-border-input);
+    --input-border-focus: var(--color-primary);
+    --input-shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    --input-placeholder: var(--color-text-placeholder);
+
+    --modal-bg: #ffffff;
+    --modal-overlay: rgba(0, 0, 0, 0.5);
+    --modal-shadow: var(--shadow-modal);
+
+    --dropdown-bg: #ffffff;
+    --dropdown-border: var(--color-border);
+    --dropdown-shadow: var(--shadow-lg);
+    --dropdown-item-hover: var(--color-bg-secondary);
+
+    --badge-bg: var(--color-bg-tertiary);
+    --badge-text: var(--color-text-secondary);
+
+    --progress-track: #e5e7eb;
+    --progress-fill: var(--color-primary);
+
+    --tooltip-bg: #1f2937;
+    --tooltip-text: #ffffff;
+
+    --scrollbar-track: var(--color-bg-secondary);
+    --scrollbar-thumb: #d1d5db;
+    --scrollbar-thumb-hover: #9ca3af;
+
+    --code-bg: #f8fafc;
+    --code-border: #e2e8f0;
+    --code-text: #e11d48;
+
+    /* Video Player */
+    --player-bg: #000000;
+    --player-controls-bg: linear-gradient(to top,
+        rgba(0,0,0,0.9) 0%, transparent 100%);
+    --player-controls-text: #ffffff;
+    --player-progress-track: rgba(255, 255, 255, 0.3);
+    --player-progress-fill: var(--color-primary);
+    --player-progress-buffered: rgba(255, 255, 255, 0.4);
+
+    /* Auth */
+    --auth-bg: linear-gradient(135deg,
+        var(--color-primary) 0%,
+        var(--color-primary-dark) 100%);
+    --auth-card-bg: #ffffff;
+    --auth-card-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+    /* Notificações */
+    --notification-bg: #ffffff;
+    --notification-border: var(--color-border);
+    --notification-shadow: var(--shadow-xl);
+
+    /* Skeleton */
+    --skeleton-base: #f3f4f6;
+    --skeleton-highlight: #e5e7eb;
+    --skeleton-animation: loading 1.5s infinite;
+
+    /* Tabelas */
+    --table-header-bg: var(--color-bg-secondary);
+    --table-row-hover: var(--color-bg-secondary);
+    --table-border: var(--color-border);
+
+    /* Tags / Pills */
+    --tag-bg: rgba(99, 102, 241, 0.1);
+    --tag-text: var(--color-primary);
+    --tag-border: rgba(99, 102, 241, 0.2);
+
+    /* Curso Card */
+    --course-card-bg: #ffffff;
+    --course-card-shadow: var(--shadow-sm);
+    --course-card-shadow-hover: var(--shadow-xl);
+    --course-card-border: var(--color-border);
 }
 
-[data-theme="light"] .auth-card {
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+/* Elementos específicos do tema claro */
+[data-theme="light"] .navbar {
+    background-color: var(--navbar-bg);
+    backdrop-filter: var(--navbar-backdrop);
+    -webkit-backdrop-filter: var(--navbar-backdrop);
+    border-bottom-color: var(--navbar-border);
+    box-shadow: var(--navbar-shadow);
 }
 
-/* Card hover enhancements */
+[data-theme="light"] .card {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+    box-shadow: var(--card-shadow);
+}
+
 [data-theme="light"] .card:hover {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--card-shadow-hover);
 }
 
-[data-theme="light"] .course-card:hover {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-}
-
-/* Form inputs */
 [data-theme="light"] .form-input,
 [data-theme="light"] .form-textarea,
 [data-theme="light"] .form-select {
-    background-color: #ffffff;
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--color-text-primary);
 }
 
 [data-theme="light"] .form-input:focus,
 [data-theme="light"] .form-textarea:focus,
 [data-theme="light"] .form-select:focus {
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    border-color: var(--input-border-focus);
+    box-shadow: var(--input-shadow-focus);
 }
 
-/* Navbar */
-[data-theme="light"] .navbar.scrolled {
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+[data-theme="light"] .auth-layout {
+    background: var(--auth-bg);
 }
 
-[data-theme="light"] .navbar-user-dropdown {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+[data-theme="light"] .auth-card {
+    background-color: var(--auth-card-bg);
+    box-shadow: var(--auth-card-shadow);
 }
 
-/* Buttons */
-[data-theme="light"] .btn-primary:hover {
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-}
-
-[data-theme="light"] .btn-success:hover {
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-}
-
-/* Dashboard stats */
-[data-theme="light"] .dashboard-stat-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
-}
-
-/* Progress bars */
-[data-theme="light"] .progress {
-    background-color: #e5e7eb;
-}
-
-/* Notifications */
-[data-theme="light"] .notification {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-/* Sidebar */
-[data-theme="light"] .sidebar-nav-item.active {
-    background-color: rgba(99, 102, 241, 0.08);
-}
-
-/* Code blocks */
-[data-theme="light"] code {
-    background-color: #f3f4f6;
-    color: #1f2937;
-}
-
-[data-theme="light"] pre {
-    background-color: #1f2937;
-    color: #e5e7eb;
-}
-
-[data-theme="light"] pre code {
-    background: none;
-    color: inherit;
-}
-
-/* Tabs */
-[data-theme="light"] .tabs {
-    border-bottom-color: #e5e7eb;
-}
-
-/* Modal */
-[data-theme="light"] .modal {
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
-}
-
-/* Scrollbar */
 [data-theme="light"] ::-webkit-scrollbar-track {
-    background: #f3f4f6;
+    background: var(--scrollbar-track);
 }
 
 [data-theme="light"] ::-webkit-scrollbar-thumb {
-    background: #d1d5db;
+    background: var(--scrollbar-thumb);
 }
 
 [data-theme="light"] ::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
+    background: var(--scrollbar-thumb-hover);
 }
 
-/* Skeleton */
 [data-theme="light"] .card-skeleton {
     background: linear-gradient(
         90deg,
-        #f9fafb 25%,
-        #f3f4f6 50%,
-        #f9fafb 75%
+        var(--skeleton-base) 25%,
+        var(--skeleton-highlight) 50%,
+        var(--skeleton-base) 75%
     );
     background-size: 200% 100%;
+    animation: var(--skeleton-animation);
 }
 
-/* Quick actions */
-[data-theme="light"] .quick-action-card:hover {
-    background-color: rgba(99, 102, 241, 0.04);
+/* Password strength bars */
+[data-theme="light"] .strength-bar {
+    height: 4px;
+    flex: 1;
+    border-radius: var(--radius-full);
+    background-color: var(--color-border);
+    transition: background-color var(--transition-fast);
+}
+
+[data-theme="light"] .password-strength-bars {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+/* Quiz styles */
+[data-theme="light"] .quiz-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--color-bg-primary);
+    width: 100%;
+    text-align: left;
+    margin-bottom: var(--spacing-sm);
+}
+
+[data-theme="light"] .quiz-option:hover:not(:disabled) {
     border-color: var(--color-primary);
+    background-color: rgba(var(--color-primary-rgb), 0.05);
 }
 
-/* Badge variants */
-[data-theme="light"] .course-card-badge {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+[data-theme="light"] .quiz-option.selected {
+    border-color: var(--color-primary);
+    background-color: rgba(var(--color-primary-rgb), 0.08);
 }
 
-/* Input addon */
-[data-theme="light"] .input-group-addon {
-    background-color: #f9fafb;
-    border-color: #e5e7eb;
-    color: #6b7280;
+[data-theme="light"] .quiz-option.correct {
+    border-color: var(--color-success);
+    background-color: rgba(16, 185, 129, 0.08);
 }
 
-/* Step progress */
-[data-theme="light"] .step-progress-item::after {
-    background-color: #e5e7eb;
+[data-theme="light"] .quiz-option.wrong {
+    border-color: var(--color-error);
+    background-color: rgba(239, 68, 68, 0.08);
 }
 
-/* Breadcrumb */
-[data-theme="light"] .breadcrumb-item a:hover {
-    color: var(--color-primary);
+[data-theme="light"] .quiz-feedback {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-top: var(--spacing-md);
+}
+
+[data-theme="light"] .quiz-feedback.correct {
+    background-color: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--color-success);
+}
+
+[data-theme="light"] .quiz-feedback.incorrect {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--color-error);
 }

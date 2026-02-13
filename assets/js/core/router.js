@@ -1,261 +1,288 @@
-// router.js - Sistema de roteamento SPA
+// router.js — SPA Router corrigido
 
 const Router = {
-    currentRoute: null,
-    routes: {},
-    middlewares: [],
-    
+    _routes: {},
+    _middlewares: [],
+    _currentRoute: null,
+    _app: null,
+
+    // Registrar rotas
+    registerRoutes(routes) {
+        this._routes = routes;
+    },
+
+    // Adicionar middleware
+    use(middleware) {
+        this._middlewares.push(middleware);
+    },
+
     // Inicializar router
     init() {
-        // Register route handlers
-        this.registerRoutes();
-        
-        // Handle browser navigation
+        this._app = document.getElementById('app');
+
+        // Mapear todas as páginas
+        this.registerRoutes({
+            '/':                    { handler: Login,         meta: ROUTE_META[ROUTES.HOME] || { guestOnly: true, layout: 'auth' } },
+            '/login':               { handler: Login,         meta: { guestOnly: true,   layout: 'auth'      } },
+            '/register':            { handler: Register,      meta: { guestOnly: true,   layout: 'auth'      } },
+            '/forgot-password':     { handler: ForgotPassword,meta: { guestOnly: true,   layout: 'auth'      } },
+            '/dashboard':           { handler: Dashboard,     meta: { requiresAuth: true, layout: 'dashboard' } },
+            '/my-courses':          { handler: MyCourses,     meta: { requiresAuth: true, layout: 'dashboard' } },
+            '/profile':             { handler: Profile,       meta: { requiresAuth: true, layout: 'dashboard' } },
+            '/courses':             { handler: Catalog,       meta: { requiresAuth: false, layout: 'dashboard' } },
+            '/course/:slug':        { handler: CourseDetails, meta: { requiresAuth: false, layout: 'dashboard' } },
+            '/player/:courseId/:lessonId': { handler: Player, meta: { requiresAuth: true, layout: 'player'   } },
+        });
+
+        // Ouvir popstate (botão voltar/avançar do browser)
         window.addEventListener('popstate', () => {
             this.handleRoute(window.location.pathname);
         });
-        
-        // Handle initial load
-        this.handleRoute(window.location.pathname);
-        
-        // Intercept link clicks
+
+        // Interceptar cliques em links internos
         document.addEventListener('click', (e) => {
-            const link = e.target.closest('a');
-            
-            if (link && link.href && this.isInternalLink(link)) {
-                e.preventDefault();
-                this.navigate(link.getAttribute('href'));
-            }
+            const link = e.target.closest('a[href]');
+            if (!link) return;
+
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('http') || href.startsWith('//') ||
+                href.startsWith('mailto:') || href.startsWith('tel:') ||
+                link.target === '_blank') return;
+
+            e.preventDefault();
+            this.navigate(href);
         });
+
+        // Rota inicial
+        this.handleRoute(window.location.pathname);
     },
-    
-    // Register all routes
-    registerRoutes() {
-        // Public routes
-        this.routes[ROUTES.HOME] = { handler: 'Home', meta: ROUTE_META[ROUTES.HOME] };
-        this.routes[ROUTES.LOGIN] = { handler: 'Login', meta: ROUTE_META[ROUTES.LOGIN] };
-        this.routes[ROUTES.REGISTER] = { handler: 'Register', meta: ROUTE_META[ROUTES.REGISTER] };
-        this.routes[ROUTES.FORGOT_PASSWORD] = { handler: 'ForgotPassword', meta: ROUTE_META[ROUTES.FORGOT_PASSWORD] };
-        this.routes[ROUTES.COURSES] = { handler: 'Catalog', meta: { title: 'Cursos' } };
-        
-        // Protected routes
-        this.routes[ROUTES.DASHBOARD] = { handler: 'Dashboard', meta: ROUTE_META[ROUTES.DASHBOARD] };
-        this.routes[ROUTES.MY_COURSES] = { handler: 'MyCourses', meta: ROUTE_META[ROUTES.MY_COURSES] };
-        this.routes[ROUTES.PROFILE] = { handler: 'Profile', meta: ROUTE_META[ROUTES.PROFILE] };
-    },
-    
-    // Navigate to route
+
+    // Navegar para rota
     navigate(path, replace = false) {
+        if (!path) path = '/';
+
+        // Normalizar path
+        const url = new URL(path, window.location.origin);
+        const fullPath = url.pathname + url.search;
+
         if (replace) {
-            window.history.replaceState(null, '', path);
+            window.history.replaceState({}, '', fullPath);
         } else {
-            window.history.pushState(null, '', path);
+            window.history.pushState({}, '', fullPath);
         }
-        
-        this.handleRoute(path);
+
+        this.handleRoute(url.pathname, url.searchParams);
     },
-    
-    // Handle route
-    async handleRoute(path) {
-        // Remove query string for route matching
-        const cleanPath = path.split('?')[0];
-        
-        // Try exact match first
-        let route = this.routes[cleanPath];
-        let params = {};
-        
-        // Try pattern matching
+
+    // Processar rota atual
+    async handleRoute(rawPath, searchParams) {
+        const path = rawPath || '/';
+
+        // Resolver rota (incluindo rotas dinâmicas)
+        const { route, params } = this.matchRoute(path);
+
         if (!route) {
-            const matchResult = matchRoute(cleanPath);
-            if (matchResult) {
-                route = {
-                    handler: matchResult.handler,
-                    meta: {}
-                };
-                params = matchResult.params;
-            }
-        }
-        
-        // 404 if no route found
-        if (!route) {
-            this.handleNotFound();
+            this.renderNotFound();
             return;
         }
-        
-        // Get route meta
-        const meta = route.meta || {};
-        
-        // Run middlewares
-        const canProceed = await this.runMiddlewares(cleanPath, meta);
-        if (!canProceed) return;
-        
-        // Update current route
-        this.currentRoute = {
-            path: cleanPath,
-            params,
-            query: this.parseQueryString(window.location.search),
-            meta
-        };
-        
-        // Update SEO
-        this.updateSEO(meta);
-        
-        // Emit route change event
-        EventBus.emit(APP_EVENTS.ROUTE_CHANGED, this.currentRoute);
-        
-        // Render page
-        await this.renderPage(route.handler, params);
-        
-        // Scroll to top
+
+        const { handler, meta } = route;
+
+        // Query string
+        const query = {};
+        const sp = searchParams || new URL(window.location.href).searchParams;
+        sp.forEach((v, k) => { query[k] = v; });
+
+        // Salvar rota atual
+        this._currentRoute = { path, params, query, meta };
+
+        // Executar middlewares
+        for (const middleware of this._middlewares) {
+            try {
+                const ok = await middleware(path, meta || {});
+                if (ok === false) return; // middleware bloqueou
+            } catch (err) {
+                console.error('Middleware error:', err);
+            }
+        }
+
+        // Renderizar página
+        await this.renderPage(handler, params, query, meta);
+    },
+
+    // Renderizar página
+    async renderPage(handler, params = {}, query = {}, meta = {}) {
+        if (!this._app) this._app = document.getElementById('app');
+        if (!this._app) return;
+
+        // Scroll para o topo
         window.scrollTo(0, 0);
-        
-        // Emit page loaded event
-        EventBus.emit(APP_EVENTS.PAGE_LOADED, this.currentRoute);
-    },
-    
-    // Run middlewares
-    async runMiddlewares(path, meta) {
-        // Check authentication
-        if (meta.requiresAuth && !State.isAuthenticated()) {
-            this.navigate(ROUTES.LOGIN + '?redirect=' + encodeURIComponent(path), true);
-            return false;
-        }
-        
-        // Check guest only (redirect if authenticated)
-        if (meta.guestOnly && State.isAuthenticated()) {
-            this.navigate(ROUTES.DASHBOARD, true);
-            return false;
-        }
-        
-        // Run custom middlewares
-        for (const middleware of this.middlewares) {
-            const result = await middleware(path, meta);
-            if (result === false) return false;
-        }
-        
-        return true;
-    },
-    
-    // Render page
-    async renderPage(handlerName, params) {
-        const appContainer = document.getElementById('app');
-        
-        // Show loading
-        State.setLoading(true);
-        appContainer.innerHTML = '<div class="loader-container"><div class="loader-spinner"></div></div>';
-        
+
         try {
-            // Get page handler
-            const PageHandler = window[handlerName];
-            
-            if (!PageHandler) {
-                throw new Error(`Page handler "${handlerName}" not found`);
+            // Mostrar loader enquanto renderiza
+            this._app.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:center;
+                            height:100vh;background:var(--color-bg-primary)">
+                    <div class="loader-spin" style="width:40px;height:40px;
+                         border:3px solid var(--color-border);
+                         border-top-color:var(--color-primary);
+                         border-radius:50%;
+                         animation:spin 0.8s linear infinite">
+                    </div>
+                </div>
+            `;
+
+            // Chamar render da página
+            let html;
+            if (typeof handler.render === 'function') {
+                html = await handler.render(params, query);
+            } else {
+                html = '<div>Página sem render()</div>';
             }
-            
-            // Render page
-            const html = await PageHandler.render(params);
-            appContainer.innerHTML = html;
-            
-            // Initialize page
-            if (PageHandler.init) {
-                await PageHandler.init(params);
+
+            // Injetar HTML
+            this._app.innerHTML = html;
+
+            // Chamar init da página
+            if (typeof handler.init === 'function') {
+                await handler.init(params, query);
             }
-            
+
+            // Atualizar título SEO
+            if (meta.title) {
+                SEO.setTitle(meta.title);
+            }
+
+            // Notificar que página carregou
+            EventBus.emit(APP_EVENTS.PAGE_LOADED || 'navigation:page-loaded', {
+                path: window.location.pathname,
+                params,
+                query
+            });
+
+            // Refresh lazy loader
+            if (typeof LazyLoader !== 'undefined') {
+                LazyLoader.refresh();
+            }
+
         } catch (error) {
             console.error('Error rendering page:', error);
-            this.handleError(error);
-        } finally {
-            State.setLoading(false);
+            this.renderError(error);
         }
     },
-    
-    // Update SEO
-    updateSEO(meta) {
-        if (meta.title) {
-            SEO.setTitle(meta.title);
+
+    // Match de rota (incluindo rotas dinâmicas)
+    matchRoute(path) {
+        // Tentativa de match exato primeiro
+        if (this._routes[path]) {
+            return { route: this._routes[path], params: {} };
         }
-        
-        if (meta.description) {
-            SEO.setDescription(meta.description);
+
+        // Match com parâmetros dinâmicos
+        for (const [pattern, route] of Object.entries(this._routes)) {
+            if (!pattern.includes(':')) continue;
+
+            const paramNames = [];
+            const regexStr = pattern
+                .replace(/:[^/]+/g, (match) => {
+                    paramNames.push(match.slice(1));
+                    return '([^/]+)';
+                });
+
+            const regex = new RegExp(`^${regexStr}$`);
+            const match = path.match(regex);
+
+            if (match) {
+                const params = {};
+                paramNames.forEach((name, i) => {
+                    params[name] = decodeURIComponent(match[i + 1]);
+                });
+                return { route, params };
+            }
         }
-        
-        SEO.setCanonical(window.location.href);
+
+        return { route: null, params: {} };
     },
-    
-    // Parse query string
-    parseQueryString(queryString) {
-        const params = {};
-        const searchParams = new URLSearchParams(queryString);
-        
-        for (const [key, value] of searchParams) {
-            params[key] = value;
-        }
-        
-        return params;
-    },
-    
-    // Check if link is internal
-    isInternalLink(link) {
-        const href = link.getAttribute('href');
-        
-        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
-            return false;
-        }
-        
-        if (href.startsWith('http://') || href.startsWith('https://')) {
-            return link.hostname === window.location.hostname;
-        }
-        
-        return true;
-    },
-    
-    // Handle 404
-    handleNotFound() {
-        const appContainer = document.getElementById('app');
-        appContainer.innerHTML = `
-            <div class="dashboard-empty">
-                <div class="dashboard-empty-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <h2 class="dashboard-empty-title">Página não encontrada</h2>
-                <p class="dashboard-empty-description">A página que você procura não existe ou foi movida.</p>
-                <button onclick="Router.navigate('/')" class="btn btn-primary">Voltar ao início</button>
+
+    // Página 404
+    renderNotFound() {
+        if (!this._app) this._app = document.getElementById('app');
+        if (!this._app) return;
+
+        this._app.innerHTML = `
+            <div style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                background: var(--color-bg-primary);
+                text-align: center;
+                padding: 24px;
+                gap: 16px;
+            ">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none" viewBox="0 0 24 24"
+                     stroke="var(--color-text-tertiary)"
+                     width="64" height="64">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="1.5"
+                          d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <h2 style="color:var(--color-text-primary);font-size:24px;
+                           font-weight:700;margin:0">
+                    Página não encontrada
+                </h2>
+                <p style="color:var(--color-text-secondary);margin:0">
+                    A página que você procura não existe ou foi movida.
+                </p>
+                <button
+                    onclick="Router.navigate('/dashboard')"
+                    style="margin-top:8px;padding:12px 24px;
+                           background:var(--color-primary);color:white;
+                           border:none;border-radius:8px;cursor:pointer;
+                           font-size:16px;font-weight:600">
+                    Voltar ao início
+                </button>
             </div>
         `;
-        
+
         SEO.setTitle('Página não encontrada');
     },
-    
-    // Handle error
-    handleError(error) {
-        const appContainer = document.getElementById('app');
-        appContainer.innerHTML = `
-            <div class="dashboard-empty">
-                <div class="dashboard-empty-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                </div>
-                <h2 class="dashboard-empty-title">Erro ao carregar página</h2>
-                <p class="dashboard-empty-description">${error.message || 'Ocorreu um erro inesperado.'}</p>
-                <button onclick="location.reload()" class="btn btn-primary">Recarregar página</button>
+
+    // Página de erro
+    renderError(error) {
+        if (!this._app) this._app = document.getElementById('app');
+        if (!this._app) return;
+
+        this._app.innerHTML = `
+            <div style="
+                display:flex;flex-direction:column;align-items:center;
+                justify-content:center;min-height:100vh;
+                background:var(--color-bg-primary);text-align:center;padding:24px;gap:16px
+            ">
+                <h2 style="color:var(--color-error);font-size:24px;font-weight:700;margin:0">
+                    Algo deu errado
+                </h2>
+                <p style="color:var(--color-text-secondary);margin:0;max-width:400px">
+                    ${error?.message || 'Ocorreu um erro inesperado.'}
+                </p>
+                <button
+                    onclick="Router.navigate('/dashboard')"
+                    style="padding:12px 24px;background:var(--color-primary);color:white;
+                           border:none;border-radius:8px;cursor:pointer;font-size:16px">
+                    Voltar ao início
+                </button>
             </div>
         `;
     },
-    
-    // Get current route
+
+    // Obter rota atual
     getCurrentRoute() {
-        return this.currentRoute;
+        return this._currentRoute;
     },
-    
-    // Add middleware
-    use(middleware) {
-        this.middlewares.push(middleware);
-    },
-    
-    // Reload current route
+
+    // Recarregar rota atual
     reload() {
         this.handleRoute(window.location.pathname);
     }

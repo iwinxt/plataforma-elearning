@@ -1,109 +1,182 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Plataforma de cursos online - Aprenda no seu ritmo">
-    <meta name="theme-color" content="#6366f1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Plataforma de cursos online" />
+    <title>EduFlow</title>
+
     
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" type="image/png" href="/images/favicon.png">
-    
-    <!-- CSS Core -->
-    <link rel="stylesheet" href="/assets/css/core/reset.css">
-    <link rel="stylesheet" href="/assets/css/core/variables.css">
-    <link rel="stylesheet" href="/assets/css/core/typography.css">
-    <link rel="stylesheet" href="/assets/css/core/utilities.css">
-    
-    <!-- CSS Components -->
-    <link rel="stylesheet" href="/assets/css/components/buttons.css">
-    <link rel="stylesheet" href="/assets/css/components/cards.css">
-    <link rel="stylesheet" href="/assets/css/components/forms.css">
-    <link rel="stylesheet" href="/assets/css/components/modals.css">
-    <link rel="stylesheet" href="/assets/css/components/navigation.css">
-    <link rel="stylesheet" href="/assets/css/components/progress-bars.css">
-    <link rel="stylesheet" href="/assets/css/components/video-player.css">
-    <link rel="stylesheet" href="/assets/css/components/notifications.css">
-    
-    <!-- CSS Layouts -->
-    <link rel="stylesheet" href="/assets/css/layouts/auth.css">
-    <link rel="stylesheet" href="/assets/css/layouts/dashboard.css">
-    <link rel="stylesheet" href="/assets/css/layouts/course-player.css">
-    
-    <title>E-Learning Platform</title>
+
+    <!-- Favicon inline (evita 404 de favicon) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%236366f1'/><path d='M20 44V20l24 12z' fill='white'/></svg>" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- CSS: Core (ordem importa) -->
+    <link rel="stylesheet" href="../assets/css/core/reset.css" />
+    <link rel="stylesheet" href="../assets/css/core/variables.css" />
+    <link rel="stylesheet" href="../assets/css/themes/light.css" />
+    <link rel="stylesheet" href="../assets/css/themes/dark.css" />
+    <link rel="stylesheet" href="../assets/css/core/typography.css" />
+    <link rel="stylesheet" href="../assets/css/core/utilities.css" />
+
+    <!-- CSS: Components -->
+    <link rel="stylesheet" href="../assets/css/components/buttons.css" />
+    <link rel="stylesheet" href="../assets/css/components/cards.css" />
+    <link rel="stylesheet" href="../assets/css/components/forms.css" />
+    <link rel="stylesheet" href="../assets/css/components/modals.css" />
+    <link rel="stylesheet" href="../assets/css/components/navigation.css" />
+    <link rel="stylesheet" href="../assets/css/components/progress-bars.css" />
+    <link rel="stylesheet" href="../assets/css/components/video-player.css" />
+    <link rel="stylesheet" href="../assets/css/components/notifications.css" />
+    <link rel="stylesheet" href="../assets/css/components/quiz.css" />
+
+    <!-- CSS: Layouts -->
+    <link rel="stylesheet" href="../assets/css/layouts/auth.css" />
+    <link rel="stylesheet" href="../assets/css/layouts/dashboard.css" />
+    <link rel="stylesheet" href="../assets/css/layouts/course-player.css" />
+
+    <style>
+        /* Loader inicial inline — aparece antes dos CSS carregarem */
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            z-index: 9999;
+            gap: 16px;
+            transition: opacity 0.3s ease;
+        }
+        [data-theme="dark"] #app-loader {
+            background: #0f172a;
+        }
+        .loader-logo {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50%       { transform: scale(1.05); opacity: 0.8; }
+        }
+        .loader-spin {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e5e7eb;
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading inicial -->
-    <div id="app-loader" class="loader-container">
-        <div class="loader-spinner"></div>
-        <p>Carregando...</p>
+
+    <!-- Loader inicial -->
+    <div id="app-loader">
+        <svg class="loader-logo" viewBox="0 0 64 64" fill="none"
+             width="64" height="64">
+            <circle cx="32" cy="32" r="32" fill="#6366f1"/>
+            <path d="M20 44V20l24 12-24 12z" fill="white"/>
+        </svg>
+        <div class="loader-spin"></div>
     </div>
-    
-    <!-- Container principal da SPA -->
+
+    <!-- App Root -->
     <div id="app"></div>
-    
-    <!-- Toast notifications -->
-    <div id="notifications-container"></div>
-    
-    <!-- Modal container -->
+
+    <!-- Containers globais -->
     <div id="modal-root"></div>
-    
-    <!-- JavaScript Core -->
-    <script src="/assets/js/config/constants.js"></script>
-    <script src="/assets/js/config/api-endpoints.js"></script>
-    <script src="/assets/js/config/routes.js"></script>
-    
-    <!-- JavaScript Utils -->
-    <script src="/assets/js/utils/storage.js"></script>
-    <script src="/assets/js/utils/crypto.js"></script>
-    <script src="/assets/js/utils/validators.js"></script>
-    <script src="/assets/js/utils/formatters.js"></script>
-    <script src="/assets/js/utils/seo.js"></script>
-    
-    <!-- JavaScript Core -->
-    <script src="/assets/js/core/events.js"></script>
-    <script src="/assets/js/core/api.js"></script>
-    <script src="/assets/js/core/state.js"></script>
-    <script src="/assets/js/core/router.js"></script>
-    
-    <!-- JavaScript Services -->
-    <script src="/assets/js/services/auth.service.js"></script>
-    <script src="/assets/js/services/course.service.js"></script>
-    <script src="/assets/js/services/progress.service.js"></script>
-    <script src="/assets/js/services/video.service.js"></script>
-    <script src="/assets/js/services/analytics.service.js"></script>
-    
-    <!-- JavaScript Components -->
-    <script src="/assets/js/components/Notification.js"></script>
-    <script src="/assets/js/components/Modal.js"></script>
-    <script src="/assets/js/components/LazyLoader.js"></script>
-    <script src="/assets/js/components/ProgressBar.js"></script>
-    <script src="/assets/js/components/CourseCard.js"></script>
-    <script src="/assets/js/components/VideoPlayer.js"></script>
-    <script src="/assets/js/components/QuizEngine.js"></script>
-    
-    <!-- JavaScript Middleware -->
-    <script src="/assets/js/middleware/rate-limit.middleware.js"></script>
-    <script src="/assets/js/middleware/session.middleware.js"></script>
-    <script src="/assets/js/middleware/auth.middleware.js"></script>
-    
-    <!-- JavaScript Pages -->
-    <script src="/assets/js/pages/auth/Login.js"></script>
-    <script src="/assets/js/pages/auth/Register.js"></script>
-    <script src="/assets/js/pages/auth/ForgotPassword.js"></script>
-    <script src="/assets/js/pages/dashboard/Home.js"></script>
-    <script src="/assets/js/pages/dashboard/MyCourses.js"></script>
-    <script src="/assets/js/pages/dashboard/Profile.js"></script>
-    <script src="/assets/js/pages/course/Catalog.js"></script>
-    <script src="/assets/js/pages/course/Details.js"></script>
-    <script src="/assets/js/pages/course/Player.js"></script>
-    
-    <!-- JavaScript App Initialization -->
-    <script src="/assets/js/core/app.js"></script>
+    <div id="notifications-container"></div>
+
+    <!-- =============================================
+         JS: Config (carregam primeiro, sem dependências)
+         ============================================= -->
+    <script src="../assets/js/config/constants.js"></script>
+    <script src="../assets/js/config/api-endpoints.js"></script>
+    <script src="../assets/js/config/routes.js"></script>
+
+    <!-- =============================================
+         JS: Utils (dependem só de config)
+         ============================================= -->
+    <script src="../assets/js/utils/storage.js"></script>
+    <script src="../assets/js/utils/crypto.js"></script>
+    <script src="../assets/js/utils/validators.js"></script>
+    <script src="../assets/js/utils/formatters.js"></script>
+    <script src="../assets/js/utils/seo.js"></script>
+
+    <!-- =============================================
+         JS: Core (dependem de utils + config)
+         ============================================= -->
+    <script src="../assets/js/core/events.js"></script>
+    <script src="../assets/js/core/api.js"></script>
+    <script src="../assets/js/core/state.js"></script>
+    <script src="../assets/js/core/router.js"></script>
+
+    <!-- =============================================
+         JS: Services (dependem de core)
+         ============================================= -->
+    <script src="../assets/js/services/analytics.service.js"></script>
+    <script src="../assets/js/services/auth.service.js"></script>
+    <script src="../assets/js/services/course.service.js"></script>
+    <script src="../assets/js/services/progress.service.js"></script>
+    <script src="../assets/js/services/video.service.js"></script>
+
+    <!-- =============================================
+         JS: Middleware (dependem de services)
+         ============================================= -->
+    <script src="../assets/js/middleware/rate-limit.middleware.js"></script>
+    <script src="../assets/js/middleware/auth.middleware.js"></script>
+    <script src="../assets/js/middleware/session.middleware.js"></script>
+
+    <!-- =============================================
+         JS: Components (dependem de tudo acima)
+         ============================================= -->
+    <script src="../assets/js/components/LazyLoader.js"></script>
+    <script src="../assets/js/components/Notification.js"></script>
+    <script src="../assets/js/components/Modal.js"></script>
+    <script src="../assets/js/components/ProgressBar.js"></script>
+    <script src="../assets/js/components/CourseCard.js"></script>
+    <script src="../assets/js/components/VideoPlayer.js"></script>
+    <script src="../assets/js/components/QuizEngine.js"></script>
+
+    <!-- =============================================
+         JS: Pages Auth
+         ============================================= -->
+    <script src="../assets/js/pages/auth/Login.js"></script>
+    <script src="../assets/js/pages/auth/Register.js"></script>
+    <script src="../assets/js/pages/auth/ForgotPassword.js"></script>
+
+    <!-- =============================================
+         JS: Pages Dashboard
+         ============================================= -->
+    <script src="../assets/js/pages/dashboard/Home.js"></script>
+    <script src="../assets/js/pages/dashboard/MyCourses.js"></script>
+    <script src="../assets/js/pages/dashboard/Profile.js"></script>
+
+    <!-- =============================================
+         JS: Pages Course
+         ============================================= -->
+    <script src="../assets/js/pages/course/Catalog.js"></script>
+    <script src="../assets/js/pages/course/Details.js"></script>
+    <script src="../assets/js/pages/course/Player.js"></script>
+
+    <!-- =============================================
+         JS: Mock API — REMOVA em produção!
+         ============================================= -->
+    <script src="../assets/js/config/mock.js"></script>
+
+    <!-- =============================================
+         JS: App — DEVE SER O ÚLTIMO
+         ============================================= -->
+    <script src="../assets/js/core/app.js"></script>
+
 </body>
 </html>
