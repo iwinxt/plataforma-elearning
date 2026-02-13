@@ -1,0 +1,150 @@
+/* Light Theme - Explicit overrides and enhancements */
+/* Base light theme variables are the defaults in variables.css */
+
+/* Auth layout enhancements */
+[data-theme="light"] .auth-layout {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+}
+
+[data-theme="light"] .auth-card {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Card hover enhancements */
+[data-theme="light"] .card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+[data-theme="light"] .course-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Form inputs */
+[data-theme="light"] .form-input,
+[data-theme="light"] .form-textarea,
+[data-theme="light"] .form-select {
+    background-color: #ffffff;
+}
+
+[data-theme="light"] .form-input:focus,
+[data-theme="light"] .form-textarea:focus,
+[data-theme="light"] .form-select:focus {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* Navbar */
+[data-theme="light"] .navbar.scrolled {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .navbar-user-dropdown {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Buttons */
+[data-theme="light"] .btn-primary:hover {
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+[data-theme="light"] .btn-success:hover {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Dashboard stats */
+[data-theme="light"] .dashboard-stat-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Progress bars */
+[data-theme="light"] .progress {
+    background-color: #e5e7eb;
+}
+
+/* Notifications */
+[data-theme="light"] .notification {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar */
+[data-theme="light"] .sidebar-nav-item.active {
+    background-color: rgba(99, 102, 241, 0.08);
+}
+
+/* Code blocks */
+[data-theme="light"] code {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+[data-theme="light"] pre {
+    background-color: #1f2937;
+    color: #e5e7eb;
+}
+
+[data-theme="light"] pre code {
+    background: none;
+    color: inherit;
+}
+
+/* Tabs */
+[data-theme="light"] .tabs {
+    border-bottom-color: #e5e7eb;
+}
+
+/* Modal */
+[data-theme="light"] .modal {
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track {
+    background: #f3f4f6;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Skeleton */
+[data-theme="light"] .card-skeleton {
+    background: linear-gradient(
+        90deg,
+        #f9fafb 25%,
+        #f3f4f6 50%,
+        #f9fafb 75%
+    );
+    background-size: 200% 100%;
+}
+
+/* Quick actions */
+[data-theme="light"] .quick-action-card:hover {
+    background-color: rgba(99, 102, 241, 0.04);
+    border-color: var(--color-primary);
+}
+
+/* Badge variants */
+[data-theme="light"] .course-card-badge {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Input addon */
+[data-theme="light"] .input-group-addon {
+    background-color: #f9fafb;
+    border-color: #e5e7eb;
+    color: #6b7280;
+}
+
+/* Step progress */
+[data-theme="light"] .step-progress-item::after {
+    background-color: #e5e7eb;
+}
+
+/* Breadcrumb */
+[data-theme="light"] .breadcrumb-item a:hover {
+    color: var(--color-primary);
+}
